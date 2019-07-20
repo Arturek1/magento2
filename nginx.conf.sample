@@ -3,14 +3,14 @@
 #    # use tcp connection
 #    # server  127.0.0.1:9000;
 #    # or socket
-#    server   unix:/var/run/php/php7.0-fpm.sock;
+#    server   unix:/var/run/php/php7.2-fpm.sock;
 # }
 # server {
 #    listen 80;
-#    server_name mage.dev;
-#    set $MAGE_ROOT /var/www/magento2;
+#    server_name localhost;
+#    set $MAGE_ROOT /var/www/html/ecommerce/public_html;
 #    set $MAGE_DEBUG_SHOW_ARGS 1;
-#    include /vagrant/magento2/nginx.conf.sample;
+#    include /var/www/html/ecommerce/public_html/nginx.conf.sample;
 # }
 #
 ## Optional override of deployment mode. We recommend you use the
@@ -44,6 +44,8 @@ location /.user.ini {
 location ~* ^/setup($|/) {
     root $MAGE_ROOT;
     location ~ ^/setup/index.php {
+        fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+    
         fastcgi_pass   fastcgi_backend;
 
         fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
